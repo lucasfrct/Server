@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+  </head>
+  <body></body>
+</html>
+
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+<script>
+  const socket = io("localhost:8000");
+
+    socket.on("connect", () => {
+    console.log("Connect");
+    });
+
+    socket.on("connectedId", (id) => {
+        console.log("Connected id: ", id);
+
+        setTimeout(() => {
+            socket.emit("get:page", "http://localhost:4200/");
+        }, 1000);
+    });
+    
+    socket.on("get:page", (page) => {
+        console.log("ON get:page", page);
+        $("html").html(page);
+        let v = setTimeout(() => { 
+            document.location.reload(true);
+            clearTimeout(v) 
+        }, 100000)
+    });
+</script>
