@@ -13,11 +13,12 @@
   const socket = io("localhost:8000");
 
     socket.on("connect", () => {
-    console.log("Connect");
+      console.log("Connect");
     });
-
+    
     socket.on("connectedId", (id) => {
-        console.log("Connected id: ", id);
+      console.log("Connected id: ", id);
+      $("html").html(`<div>Socket :8000, - ID: ${id}`);
 
         setTimeout(() => {
             socket.emit("get:page", "http://localhost:4200/");
@@ -26,10 +27,5 @@
     
     socket.on("get:page", (page) => {
         console.log("ON get:page", page);
-        $("html").html(page);
-        let v = setTimeout(() => { 
-            document.location.reload(true);
-            clearTimeout(v) 
-        }, 100000)
     });
 </script>

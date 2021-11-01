@@ -1,8 +1,10 @@
-package main
+package socket
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 
 	socketio "github.com/googollee/go-socket.io"
 	"github.com/googollee/go-socket.io/engineio"
@@ -43,8 +45,8 @@ func (s *Socket) New() *socketio.Server {
 	return s.server
 }
 
-func (s *Socket) Event(path, event string, clojure func(s socketio.Conn, data string)) {
-	s.server.OnEvent(path, event, clojure)
+func (s *Socket) Event(event string, clojure func(s socketio.Conn, data string)) {
+	go s.server.OnEvent("/", event, clojure)
 }
 
 func (s *Socket) Run() {
@@ -57,7 +59,7 @@ func (s *Socket) Run() {
 	defer s.server.Close()
 
 	http.Handle("/socket.io/", s.server)
-	http.Handle("/", http.FileServer(http.Dir("../pages")))
+	http.Handle("/", http.FileServer(http.Dir("./pages")))
 
 	log.Println("Socket- localhost:8000...")
 	http.ListenAndServe(":8000", nil)
@@ -69,6 +71,13 @@ func (s *Socket) allowOriginFunc(r *http.Request) bool {
 	return true
 }
 
+func check(e error) {
+	if e != nil {
+		fmt.Println(e)
+		panic(e)
+	}
+}
+
 func main() {
 	log.Println("==================================================")
 	log.Println("Servertools - 0.0.1")
@@ -77,8 +86,21 @@ func main() {
 	socket := Socket{}
 	socket.New()
 
-	socket.Event("/", "get:page", func(s socketio.Conn, data string) {
-		log.Println("get:pages : ", data)
+	socket.Event("get:page", func(s socketio.Conn, data string) {
+		log.Println("get:pages ID: ", s.ID(), " - ", data)
+		log.Println()
+
+		url, _ := url.Parse(data)
+		// proxy := httputil.NewSingleHostReverseProxy(url)
+		log.Println(url.Scheme)
+		// response, err := http.Get(data)
+		// check(err)
+		// defer response.Body.Close()
+		// body, _ := ioutil.ReadAll(response.Body)
+		// fmt.Println(string(body))
+
+		s.Emit("get:page", "http://localhost:8000/page")
+		// s.Emit("get:page", "server->host")
 	})
 
 	socket.Run()
@@ -86,10 +108,12 @@ func main() {
 }
 
 /*
-				server
-			  /		   \
-			 /			\
-			/	         \
-	 client 	  		   client
+				   port :8080
+					server
+				  /		   \
+				 /			\
+				/	         \
+		 client 	  		   client
+port :4200->8000            port :5500
 
 */

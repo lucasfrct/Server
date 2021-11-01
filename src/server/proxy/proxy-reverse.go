@@ -1,10 +1,12 @@
-package reverse
+package main
 
 import (
-	"log"
+	"bufio"
+	"fmt"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"os"
 )
 
 type Proxy struct {
@@ -30,7 +32,33 @@ func (p *Proxy) redirect(res http.ResponseWriter, req *http.Request) {
 	req.Header.Set("X-Forwarded-Host", req.Header.Get("Host"))
 	req.Host = url.Host
 
-	log.Println(url.Scheme)
+	// log.Println(url.Scheme)
 
 	proxy.ServeHTTP(res, req)
+}
+
+func main() {
+	scanner := bufio.NewScanner(os.Stdin)
+
+	fmt.Println("Digite a porta do servidor que quer levantar:")
+	scanner.Scan()
+	portOnject := scanner.Text()
+	fmt.Println("")
+
+	fmt.Println("Digite a Url que quer copiar/redirecionar:")
+	scanner.Scan()
+	url := scanner.Text()
+	fmt.Println("")
+
+	fmt.Println("============================================  PROXY REVERSO ========================================================")
+	fmt.Println("====================================================================================================================")
+	fmt.Println("")
+	fmt.Printf("    Redirecionando Servicor [ %s  --->  %s ] ", url, portOnject)
+	fmt.Println("")
+	fmt.Println("")
+	fmt.Println("====================================================================================================================")
+	fmt.Println("====================================================================================================================")
+
+	// prx := Proxy{urlObject: portOnject, urlTarget: url}
+	// prx.New(portOnject, url)
 }
