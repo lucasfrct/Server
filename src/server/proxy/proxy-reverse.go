@@ -59,6 +59,6 @@ func main() {
 	fmt.Println("====================================================================================================================")
 	fmt.Println("====================================================================================================================")
 
-	// prx := Proxy{urlObject: portOnject, urlTarget: url}
-	// prx.New(portOnject, url)
+	prx := Proxy{urlObject: portOnject, urlTarget: url}
+	prx.New(portOnject, url)
 }
