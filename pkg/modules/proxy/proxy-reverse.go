@@ -3,10 +3,12 @@ package proxy
 import (
 	"bufio"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
 	"os"
+	"strings"
 )
 
 type Proxy struct {
@@ -18,6 +20,26 @@ func (p *Proxy) Redirect(res http.ResponseWriter, req *http.Request) {
 	url, _ := url.Parse(p.TargetpointUrl)
 
 	proxy := httputil.NewSingleHostReverseProxy(url)
+
+	// Manipulação personalizada da solicitação antes de encaminhá-la para o servidor SSR
+	proxy.ModifyResponse = func(resp *http.Response) error {
+		// Lê o corpo da resposta do servidor SSR
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			return err
+		}
+		defer resp.Body.Close()
+
+		// Realiza qualquer manipulação necessária no conteúdo do corpo da resposta
+		// Aqui você pode fazer alterações específicas no HTML retornado pelo servidor SSR
+
+		// Atualiza o conteúdo do corpo da resposta
+		newBody := []byte("Manipulated SSR content: " + string(body))
+		resp.Body = ioutil.NopCloser(strings.NewReader(string(newBody)))
+		resp.ContentLength = int64(len(newBody))
+
+		return nil
+	}
 
 	req.URL.Host = url.Host
 	req.URL.Scheme = url.Scheme
