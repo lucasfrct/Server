@@ -22,6 +22,7 @@ func (p *Proxy) Redirect(res http.ResponseWriter, req *http.Request) {
 	req.URL.Host = url.Host
 	req.URL.Scheme = url.Scheme
 	req.Header.Set("X-Forwarded-Host", req.Header.Get("Host"))
+	req.Header.Set("Access-Control-Allow-Origin", "*")
 	req.Host = url.Host
 	proxy.ServeHTTP(res, req)
 }
