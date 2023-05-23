@@ -1,13 +1,11 @@
-module lucasfrct.com/server
+module github.com/lucasfrct/servertools
 
-go 1.16
+go 1.20
 
-replace lucasfrct.com/login => ./src/login
+require github.com/googollee/go-socket.io v1.7.0
 
-replace lucasfrct.com/account => ./src/account
-
-replace lucasfrct.com/server/router/router => ./src/server/router
-
-replace lucasfrct.com/server/server => ./src/server
-
-require github.com/googollee/go-socket.io v1.6.1 // indirect
+require (
+	github.com/gofrs/uuid v4.0.0+incompatible // indirect
+	github.com/gomodule/redigo v1.8.4 // indirect
+	github.com/gorilla/websocket v1.4.2 // indirect
+)

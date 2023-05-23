@@ -1,14 +1,7 @@
 package main
 
-import "log"
-
-func check(e error) {
-	if e != nil {
-		log.Println(e)
-		panic(e)
-	}
-}
+import "github.com/lucasfrct/servertools/pkg/modules/proxy"
 
 func main() {
-
+	proxy.Reverse()
 }
