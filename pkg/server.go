@@ -3,20 +3,24 @@ package server
 import (
 	"net/http"
 
-	"github.com/lucasfrct/servertools/pkg/router"
+	"github.com/lucasfrct/servertools/pkg/routes"
 )
 
 type Server struct {
 	port        string
 	directories []string
-	directory   string
 }
 
 func (s *Server) New() {
 
-	router.Assets()
-	router.Directories(s.directories)
-	http.ListenAndServe(":8080", nil)
+	s.port = ":8080"
+
+	routes.Assets()
+	routes.Directories(s.directories)
+	err := http.ListenAndServe(s.port, nil)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func (s *Server) AddDirectory(directory string) {
