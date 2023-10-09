@@ -11,6 +11,7 @@ import (
 	"github.com/lucasfrct/servertools/pkg/modules/command"
 	"github.com/lucasfrct/servertools/pkg/modules/gitcommand"
 	"github.com/lucasfrct/servertools/pkg/modules/schedule"
+	"github.com/lucasfrct/servertools/tasks"
 )
 
 func TaskPathfinderOfFilesModifieds(pathSource string) []string {
@@ -114,7 +115,9 @@ func main() {
 	done = schedule.Schedule(func() {
 
 		spew.Dump("chamada schedule")
-		// pull.Pull("../transfering")
+		tasks.Pull("../ms-onboarding-user-java")
+
+		tasks.Push("../ms-onboarding-user-java")
 
 		// // Maquina 1 - Fluxo In (M1Fi)
 		// pathSourceM1Fi := "../transfering"
