@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/davecgh/go-spew/spew"
-	"github.com/lucasfrct/servertools/pkg/modules/gitcommand"
 	"github.com/lucasfrct/servertools/pkg/modules/schedule"
 )
 
@@ -32,23 +31,23 @@ func main() {
 		spew.Dump(resp)
 
 		// Maquina 1 - Fluxo in(M1Fi)
-		pathSourceM1Fi := "../trans"
-		pathDestM1Fi := "../sinis"
-		cmdStrPullM1Fi := gitcommand.GitPull(pathSourceM1Fi)
-		spew.Dump(cmdStrPullM1Fi)
-		files := TaskPathfinderOfFilesModifieds(pathSourceM1Fi)
-		_ = TaskCopyFiles(files, pathSourceM1Fi, pathDestM1Fi)
-		spew.Dump(files)
+		// pathSourceM1Fi := "../trans"
+		// pathDestM1Fi := "../sinis"
+		// cmdStrPullM1Fi := gitcommand.GitPull(pathSourceM1Fi)
+		// spew.Dump(cmdStrPullM1Fi)
+		// files := TaskPathfinderOfFilesModifieds(pathSourceM1Fi)
+		// _ = TaskCopyFiles(files, pathSourceM1Fi, pathDestM1Fi)
+		// spew.Dump(files)
 
 		// Maquina 2 - Fluxo in(M2Fi)
-		pathSourceM2Fi := "../trans"
-		cmdStrPullM2Fi := gitcommand.GitPull(pathSourceM2Fi)
-		spew.Dump(cmdStrPullM2Fi)
+		// pathSourceM2Fi := "../trans"
+		// cmdStrPullM2Fi := gitcommand.GitPull(pathSourceM2Fi)
+		// spew.Dump(cmdStrPullM2Fi)
 
 		// Maquina 2 - Fluxo out(M2Fo)
-		pathSourceM2Fo := "../trans"
-		respM2Fo := TaskCommitFilesModified(pathSourceM2Fo)
-		spew.Dump(respM2Fo)
+		// pathSourceM2Fo := "../trans"
+		// respM2Fo := TaskCommitFilesModified(pathSourceM2Fo)
+		// spew.Dump(respM2Fo)
 
 	}, scheduleTime*time.Second)
 
