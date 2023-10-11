@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/davecgh/go-spew/spew"
 	cp "github.com/otiai10/copy"
 )
 
@@ -46,6 +47,7 @@ func Exec(path string, command string) (cmdStr string, err error) {
 
 	} else {
 		cmdarr := strings.Split(command, " ")
+		spew.Dump(cmdarr)
 		cmd := exec.Command(cmdarr[0], cmdarr[1:]...)
 
 		cmd.Dir = pathAbs
