@@ -9,7 +9,7 @@ import (
 )
 
 func GitAdd(filePath string) (gitString string) {
-	return fmt.Sprintf(`git add %v`, filePath)
+	return fmt.Sprintf(`git add %s`, filePath)
 }
 
 func GitAddAll() (gitString string) {

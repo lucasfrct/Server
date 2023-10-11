@@ -29,22 +29,39 @@ func Exec(path string, command string) (cmdStr string, err error) {
 		panic(path)
 	}
 
-	cmdarr := strings.Split(command, " ")
-	cmd := exec.Command(cmdarr[0], cmdarr[1:]...)
+	if strings.Contains(command, "git add") {
 
-	cmd.Dir = pathAbs
-	cmd.Env = append(cmd.Environ(), "POSIXLY_CORRECT=1")
+		cmdarr := strings.SplitN(command, " ", 3)
+		cmd := exec.Command(cmdarr[0], cmdarr[1:]...)
 
-	cmdByte, err := cmd.Output()
-	if err != nil {
-		panic(command)
+		cmd.Dir = pathAbs
+		cmd.Env = append(cmd.Environ(), "POSIXLY_CORRECT=1")
+
+		cmdByte, err := cmd.Output()
+		if err != nil {
+			panic(command)
+		}
+
+		cmdStr = string(cmdByte)
+
+	} else {
+		cmdarr := strings.Split(command, " ")
+		cmd := exec.Command(cmdarr[0], cmdarr[1:]...)
+
+		cmd.Dir = pathAbs
+		cmd.Env = append(cmd.Environ(), "POSIXLY_CORRECT=1")
+
+		cmdByte, err := cmd.Output()
+		if err != nil {
+			panic(command)
+		}
+
+		cmdStr = string(cmdByte)
 	}
-
-	cmdStr = string(cmdByte)
 	return
 }
 
-func Copy(pathSouce, pathDest string) (err error) {
+func Copy(pathSouce, pathDest string) error {
 
 	if pathSouce == "" {
 		return errors.New("path de origem vazio")
@@ -54,6 +71,5 @@ func Copy(pathSouce, pathDest string) (err error) {
 		return errors.New("path de destino vazio")
 	}
 
-	err = cp.Copy(pathSouce, pathDest)
-	return
+	return cp.Copy(pathSouce, pathDest)
 }
