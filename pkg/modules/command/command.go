@@ -30,33 +30,7 @@ func Exec(path string, command string) (cmdStr string, err error) {
 	if err != nil {
 		panic(path)
 	}
-	// C://Users/Marcus Mariano/Documents/git hub/projeto 1/main.go
-	// quebrar nos espaços
-	// fazer um for sobre o array
-	// pegar o item anterior concatenar com o item atual e testar se é um path
-	// se for um path adicionar o item concatenado a um novo array
-	// se nao for path adicionar o item para o novo array
 
-	// ["", "", "", ""]
-	// [""]
-
-	// if strings.Contains(command, "git add") {
-
-	// 	cmdarr := strings.SplitN(command, " ", 3)
-	// 	cmd := exec.Command(cmdarr[0], cmdarr[1:]...)
-
-	// 	cmd.Dir = pathAbs
-	// 	cmd.Env = append(cmd.Environ(), "POSIXLY_CORRECT=1")
-
-	// 	cmdByte, err := cmd.Output()
-	// 	if err != nil {
-	// 		panic(command)
-	// 	}
-
-	// 	cmdStr = string(cmdByte)
-
-	// } else {
-	// command = `git add C:\Users\Marcus Mariano\Documents\GitHub\lucasfrct\servertools\main.go`
 	cmdarr := strings.Split(command, " ")
 	cmdarrAux := []string{}
 	pathTemp := ""
@@ -84,7 +58,7 @@ func Exec(path string, command string) (cmdStr string, err error) {
 	}
 
 	cmdStr = string(cmdByte)
-	// }
+
 	return
 }
 
