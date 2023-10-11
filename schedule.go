@@ -20,6 +20,7 @@ func main() {
 		// tasks.Pull("../servertools")
 
 		tasks.Push("../servertools")
+		// asd
 
 		// err := tasks.Copy("../sinis", "../transfer")
 		// if err != nil {
