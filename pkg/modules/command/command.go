@@ -2,6 +2,8 @@ package command
 
 import (
 	"errors"
+	"fmt"
+	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
@@ -29,7 +31,8 @@ func Exec(path string, command string) (cmdStr string, err error) {
 		panic(path)
 	}
 
-	cmdarr := strings.Split(command, " ")
+	cmdarr := pathConditioning(strings.Split(command, " "))
+
 	cmd := exec.Command(cmdarr[0], cmdarr[1:]...)
 
 	cmd.Dir = pathAbs
@@ -41,10 +44,29 @@ func Exec(path string, command string) (cmdStr string, err error) {
 	}
 
 	cmdStr = string(cmdByte)
+
 	return
 }
 
-func Copy(pathSouce, pathDest string) (err error) {
+func pathConditioning(cmdArr []string) (cmdArrAux []string) {
+	cmdArrAux = []string{}
+	pathTemp := ""
+	for i := range cmdArr {
+		if !strings.Contains(cmdArr[i], string(os.PathSeparator)) {
+			cmdArrAux = append(cmdArrAux, cmdArr[i])
+			continue
+		}
+		pathTemp = fmt.Sprintf("%s %s", pathTemp, cmdArr[i])
+		path := strings.TrimSpace(pathTemp)
+		if _, err := os.Stat(path); err == nil {
+			cmdArrAux = append(cmdArrAux, path)
+			pathTemp = ""
+		}
+	}
+	return
+}
+
+func Copy(pathSouce, pathDest string) error {
 
 	if pathSouce == "" {
 		return errors.New("path de origem vazio")
@@ -54,6 +76,5 @@ func Copy(pathSouce, pathDest string) (err error) {
 		return errors.New("path de destino vazio")
 	}
 
-	err = cp.Copy(pathSouce, pathDest)
-	return
+	return cp.Copy(pathSouce, pathDest)
 }

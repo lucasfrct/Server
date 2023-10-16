@@ -9,7 +9,7 @@ import (
 )
 
 func GitAdd(filePath string) (gitString string) {
-	return fmt.Sprintf(`git add %v`, filePath)
+	return fmt.Sprintf(`git add %s`, filePath)
 }
 
 func GitAddAll() (gitString string) {
@@ -25,7 +25,7 @@ func GitPush() (commited string) {
 }
 
 func GitSync() (commited string) {
-	return `git pull --all; git pull --tags; git pull -p; git fetch --prune; git fetch upstream --prune; git clean -f -x -d -n`
+	return `git pull --all; git pull --tags; git pull -p; git fetch --prune; git clean -f -x -d -n`
 }
 
 func GitProcessToCommit(modifiedArquives []string) (commited string) {

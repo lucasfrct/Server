@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/lucasfrct/servertools/pkg/modules/schedule"
 )
 
@@ -17,26 +16,26 @@ func main() {
 
 		// pathSource := "../utils"
 		// pathDest := "../cp"
-		// files := TaskPathfinderOfFilesModifieds(pathSource)
-		// _ = TaskCopyFiles(files, pathSource, pathDest)
-		// resp := TaskCommitFilesModified(pathDest)
+		// files := tasks.PathfinderOfFilesModifieds(pathSource)
+		// _ = tasks.CopyFiles(files, pathSource, pathDest)
+		// resp := tasks.CommitFilesModified(pathDest)
 		// spew.Dump(resp)
 
 		// Maquina 1 - Fluxo out(M1Fo)
-		pathSourceM1Fo := "../sinis"
-		pathDestM1Fo := "../trans"
-		filesM1Fo := TaskPathfinderOfFilesModifieds(pathSourceM1Fo)
-		_ = TaskCopyFiles(filesM1Fo, pathSourceM1Fo, pathDestM1Fo)
-		resp := TaskCommitFilesModified(pathDestM1Fo)
-		spew.Dump(resp)
+		// pathSourceM1Fo := "../sinis"
+		// pathDestM1Fo := "../trans"
+		// filesM1Fo := tasks.PathfinderOfFilesModifieds(pathSourceM1Fo)
+		// _ = tasks.CopyFiles(filesM1Fo, pathSourceM1Fo, pathDestM1Fo)
+		// resp := tasks.CommitFilesModified(pathDestM1Fo)
+		// spew.Dump(resp)
 
 		// Maquina 1 - Fluxo in(M1Fi)
 		// pathSourceM1Fi := "../trans"
 		// pathDestM1Fi := "../sinis"
 		// cmdStrPullM1Fi := gitcommand.GitPull(pathSourceM1Fi)
 		// spew.Dump(cmdStrPullM1Fi)
-		// files := TaskPathfinderOfFilesModifieds(pathSourceM1Fi)
-		// _ = TaskCopyFiles(files, pathSourceM1Fi, pathDestM1Fi)
+		// files := tasks.PathfinderOfFilesModifieds(pathSourceM1Fi)
+		// _ = tasks.CopyFiles(files, pathSourceM1Fi, pathDestM1Fi)
 		// spew.Dump(files)
 
 		// Maquina 2 - Fluxo in(M2Fi)
@@ -46,7 +45,7 @@ func main() {
 
 		// Maquina 2 - Fluxo out(M2Fo)
 		// pathSourceM2Fo := "../trans"
-		// respM2Fo := TaskCommitFilesModified(pathSourceM2Fo)
+		// respM2Fo := tasks.CommitFilesModified(pathSourceM2Fo)
 		// spew.Dump(respM2Fo)
 
 	}, scheduleTime*time.Second)
