@@ -64,7 +64,7 @@ func GitListFilesModified(cmd string) []string {
 }
 
 func GitPull(pathSource string) (cmdStr string) {
-	cmd := "git pull --all"
+	cmd := "git pull"
 	cmdStr, err := command.Exec(pathSource, cmd)
 
 	if err != nil {

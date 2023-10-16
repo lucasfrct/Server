@@ -11,6 +11,7 @@ import (
 	"github.com/lucasfrct/servertools/pkg/modules/command"
 	"github.com/lucasfrct/servertools/pkg/modules/gitcommand"
 	"github.com/lucasfrct/servertools/pkg/modules/schedule"
+	"github.com/lucasfrct/servertools/tasks"
 )
 
 func TaskPathfinderOfFilesModifieds(pathSource string) []string {
@@ -94,7 +95,7 @@ func TaskCommitFilesModified(pathSource string) string {
 func TaskSyncProject(source, dest string) {
 	err := TaskCopy(source, dest)
 	if err != nil {
-		panic("Errro ao tentar copiar arquivos")
+		panic("Erro ao tentar copiar arquivos")
 	}
 
 	fmt.Println(fmt.Sprintf("* Arquivos copiados: (%s) -> (%s)", source, dest))
@@ -113,21 +114,26 @@ func main() {
 
 	done = schedule.Schedule(func() {
 
-		// Maquina 1 - Fluxo out(M1Fo)
-		pathSourceM1Fo := "../sinis"
-		pathDestM1Fo := "../transfering"
-		filesM1Fo := TaskPathfinderOfFilesModifieds(pathSourceM1Fo)
-		filesM1FoCopied := TaskCopyFiles(filesM1Fo, pathSourceM1Fo, pathDestM1Fo)
-		// resp := TaskCommitFilesModified(pathDestM1Fo)
-		spew.Dump(filesM1FoCopied)
+		spew.Dump("chamada schedule")
+		tasks.Pull("../ms-onboarding-user-java")
 
-		// Maquina 1 - Fluxo in(M1Fi)
-		pathSourceM1Fi := "../transfering"
-		pathDestM1Fi := "../sinis"
+		tasks.Push("../ms-onboarding-user-java")
+
+		// // Maquina 1 - Fluxo In (M1Fi)
+		// pathSourceM1Fi := "../transfering"
+		// pathDestM1Fi := "../sinis"
 		// cmdStrPullM1Fi := gitcommand.GitPull(pathSourceM1Fi)
-		filesM1Fi := TaskPathfinderOfFilesModifieds(pathSourceM1Fi)
-		filesM1FiCopied := TaskCopyFiles(filesM1Fi, pathSourceM1Fi, pathDestM1Fi)
-		spew.Dump(filesM1FiCopied)
+		// filesM1Fi := TaskPathfinderOfFilesModifieds(pathSourceM1Fi)
+		// filesM1FiCopied := TaskCopyFiles(filesM1Fi, pathSourceM1Fi, pathDestM1Fi)
+		// spew.Dump(cmdStrPullM1Fi)
+
+		// // Maquina 1 - Fluxo out(M1Fo)
+		// pathSourceM1Fo := "../sinis"
+		// pathDestM1Fo := "../transfering"
+		// filesM1Fo := TaskPathfinderOfFilesModifieds(pathSourceM1Fo)
+		// filesM1FoCopied := TaskCopyFiles(filesM1Fo, pathSourceM1Fo, pathDestM1Fo)
+		// resp := TaskCommitFilesModified(pathDestM1Fo)
+		// spew.Dump(filesM1FoCopied)
 
 		// // Maquina 2 - Fluxo in(M2Fi)
 		// pathSourceM2Fi := "../transfering"
