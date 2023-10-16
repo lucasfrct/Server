@@ -31,23 +31,9 @@ func Exec(path string, command string) (cmdStr string, err error) {
 		panic(path)
 	}
 
-	cmdarr := strings.Split(command, " ")
-	cmdarrAux := []string{}
-	pathTemp := ""
-	for i := range cmdarr {
-		if !strings.Contains(cmdarr[i], string(os.PathSeparator)) {
-			cmdarrAux = append(cmdarrAux, cmdarr[i])
-			continue
-		}
-		pathTemp = fmt.Sprintf("%s %s", pathTemp, cmdarr[i])
-		path := strings.TrimSpace(pathTemp)
-		if _, err := os.Stat(path); err == nil {
-			cmdarrAux = append(cmdarrAux, path)
-			pathTemp = ""
-		}
-	}
+	cmdarr := pathConditioning(strings.Split(command, " "))
 
-	cmd := exec.Command(cmdarrAux[0], cmdarrAux[1:]...)
+	cmd := exec.Command(cmdarr[0], cmdarr[1:]...)
 
 	cmd.Dir = pathAbs
 	cmd.Env = append(cmd.Environ(), "POSIXLY_CORRECT=1")
@@ -59,6 +45,24 @@ func Exec(path string, command string) (cmdStr string, err error) {
 
 	cmdStr = string(cmdByte)
 
+	return
+}
+
+func pathConditioning(cmdArr []string) (cmdArrAux []string) {
+	cmdArrAux = []string{}
+	pathTemp := ""
+	for i := range cmdArr {
+		if !strings.Contains(cmdArr[i], string(os.PathSeparator)) {
+			cmdArrAux = append(cmdArrAux, cmdArr[i])
+			continue
+		}
+		pathTemp = fmt.Sprintf("%s %s", pathTemp, cmdArr[i])
+		path := strings.TrimSpace(pathTemp)
+		if _, err := os.Stat(path); err == nil {
+			cmdArrAux = append(cmdArrAux, path)
+			pathTemp = ""
+		}
+	}
 	return
 }
 
