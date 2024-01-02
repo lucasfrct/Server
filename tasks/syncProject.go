@@ -18,5 +18,4 @@ func SyncProject(source, dest string) {
 	resp = gitcommand.GitPull(dest)
 	fmt.Println(fmt.Sprintf("* Projeto sincronizado (%s): %s", dest, resp))
 
-	// tira a diferenca entre dois diretórios
 }

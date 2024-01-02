@@ -2,14 +2,12 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/davecgh/go-spew/spew"
-	"github.com/lucasfrct/servertools/pkg/modules/command"
 	"github.com/lucasfrct/servertools/pkg/modules/gitcommand"
+	"github.com/lucasfrct/servertools/tasks"
 )
 
 type Config struct {
@@ -30,98 +28,7 @@ func Read(path string) (content string, err error) {
 	return
 }
 
-func TaskPathfinderOfFilesModifieds(pathSource string) []string {
-
-	pathAbs, err := filepath.Abs(pathSource)
-	if err != nil {
-		panic(err)
-	}
-
-	gitFiles, err := command.Exec(pathAbs, gitcommand.GitListFiles())
-	if err != nil {
-		panic(err)
-	}
-
-	files := gitcommand.GitListFilesModified(gitFiles)
-
-	for i := range files {
-		files[i] = filepath.Join(pathAbs, files[i])
-	}
-
-	return files
-}
-
-func TaskCopy(pathSource, pathDest string) error {
-	return command.Copy(pathSource, pathDest)
-}
-
-func TaskCopyFiles(files []string, pathSource, pathDest string) []string {
-
-	pathSourceAbs, err := filepath.Abs(pathSource)
-	if err != nil {
-		panic(err)
-	}
-
-	pathDestAbs, err := filepath.Abs(pathDest)
-	if err != nil {
-		panic(err)
-	}
-
-	err = os.MkdirAll(pathDestAbs, os.ModePerm)
-	if err != nil {
-		panic(err)
-	}
-
-	for i := range files {
-		source := files[i]
-		dest := filepath.Join(pathDestAbs, strings.Split(files[i], pathSourceAbs)[1])
-		TaskCopy(source, dest)
-		files[i] = dest
-	}
-
-	return files
-}
-
-func TaskCommitFilesModified(pathSource string) string {
-	files := TaskPathfinderOfFilesModifieds(pathSource)
-	cmd := gitcommand.GitProcessToCommit(files)
-
-	var resp string = ""
-	commands := strings.Split(cmd, ";")
-	for i := range commands {
-		c := strings.TrimSpace(commands[i])
-
-		if len(c) == 0 || c == "" {
-			continue
-		}
-
-		fmt.Println(" -- > RUN: ", c)
-		r, err := command.Exec(pathSource, c)
-		if err != nil {
-			continue
-		}
-
-		resp += r
-
-	}
-
-	return resp
-}
-
-func TaskSyncProject(source, dest string) {
-	err := TaskCopy(source, dest)
-	if err != nil {
-		panic("Errro ao tentar copiar arquivos")
-	}
-
-	fmt.Println(fmt.Sprintf("* Arquivos copiados: (%s) -> (%s)", source, dest))
-	resp := TaskCommitFilesModified(dest)
-	fmt.Println(fmt.Sprintf("* Projeto Commitado (%s): %s", dest, resp))
-	resp = gitcommand.GitPull(dest)
-	fmt.Println(fmt.Sprintf("* Projeto sincronizado (%s): %s", dest, resp))
-}
-
-func main() {
+func init() {
 
 	content, err := Read("./schedule-commiter.json")
 	if err != nil {
@@ -134,8 +41,8 @@ func main() {
 		panic("O Arquivo ./schedule-commiter.json está com json mal formatado")
 	}
 
-	fliesModified := TaskPathfinderOfFilesModifieds(config.Source)
-	filesCopied := TaskCopyFiles(fliesModified, config.Source, config.Destination)
+	fliesModified := tasks.PathfinderOfFilesModifieds(config.Source)
+	filesCopied := tasks.CopyFiles(fliesModified, config.Source, config.Destination)
 	spew.Dump(filesCopied)
 
 	// done := make(chan bool)

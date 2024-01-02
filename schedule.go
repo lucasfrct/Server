@@ -9,7 +9,7 @@ import (
 	"github.com/lucasfrct/servertools/tasks"
 )
 
-func main() {
+func init() {
 
 	done := make(chan bool)
 	var scheduleTime time.Duration = 10
